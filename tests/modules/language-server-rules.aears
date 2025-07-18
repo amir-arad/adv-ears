@@ -1,0 +1,5 @@
+The language server shall provide syntax validation
+The language server shall offer auto-completion
+When hover requested the language server shall display entity information
+WHERE LSP client connected the language server shall send diagnostics
+WHILE editing active the validation shall run continuously

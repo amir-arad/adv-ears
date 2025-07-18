@@ -1,0 +1,4 @@
+The file reader shall load aears content
+When file changed the watcher shall trigger reprocessing
+The output writer shall save generated diagrams
+WHERE multiple files the processor shall handle batch operations

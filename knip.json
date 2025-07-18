@@ -1,0 +1,24 @@
+{
+  "$schema": "https://unpkg.com/knip@5/schema.json",
+  "entry": [
+    "src/index.ts",
+    "src/cli/cli.ts"
+  ],
+  "project": ["src/**/*.ts"],
+  "ignore": ["dist/**", "node_modules/**", "**/*.test.ts", "test-*.js"],
+  "ignoreBinaries": [],
+  "ignoreDependencies": [],
+  "includeEntryExports": true,
+  "rules": {
+    "files": "error",
+    "dependencies": "error",
+    "unlisted": "error",
+    "exports": "error",
+    "nsExports": "error",
+    "classMembers": "error",
+    "types": "error",
+    "nsTypes": "error",
+    "enumMembers": "error",
+    "duplicates": "error"
+  }
+}

@@ -1,0 +1,4 @@
+WHILE parsing active the error handler shall collect issues
+When error occurs the system shall preserve partial results
+IF critical error THEN the system shall halt processing
+The error reporter shall provide line numbers

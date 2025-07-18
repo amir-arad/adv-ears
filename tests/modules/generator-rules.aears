@@ -1,0 +1,4 @@
+The generator shall extract actors from entities
+The generator shall extract use cases from functionalities
+When AST parsed the generator shall create PlantUML output
+WHERE relationships detected the generator shall map use case connections

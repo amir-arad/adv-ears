@@ -1,0 +1,4 @@
+The parser shall tokenize aears files
+The parser shall generate AST from tokens
+When syntax error detected the parser shall report error location
+IF malformed syntax THEN the parser shall provide recovery suggestions

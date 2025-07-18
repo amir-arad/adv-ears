@@ -1,0 +1,4 @@
+The cli shall accept aears file input
+When validation requested the cli shall check syntax
+When generation requested the cli shall output UML
+IF file invalid THEN the cli shall exit with error code

@@ -1,0 +1,15 @@
+{
+  "nodejs-testing.exclude": [
+    "**/node_modules/**",
+    "**/dist/**",
+    "**/build/**",
+    "**/.vscode/**",
+    "**/.git/**"
+  ],
+  "nodejs-testing.extensions": [
+    {
+      "extensions": ["mts", "cts", "ts"],
+      "parameters": ["--import", "tsx"]
+    }
+  ]
+}

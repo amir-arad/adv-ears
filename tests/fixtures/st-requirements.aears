@@ -1,0 +1,5 @@
+While parsing active the error handler shall collect issues
+While editing active the validation shall run continuously
+While LSP client connected the language server shall send diagnostics
+While relationships detected the generator shall map use case connections
+While parsing active the error handler shall collect issues

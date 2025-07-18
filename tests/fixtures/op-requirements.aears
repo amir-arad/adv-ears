@@ -1,0 +1,7 @@
+If malformed syntax then the parser shall provide recovery suggestions
+If file not aears format then the extension shall show warning
+If file invalid then the cli shall exit with error code
+If critical error then the system shall halt processing
+Where LSP client connected the language server shall send diagnostics
+Where relationships detected the generator shall map use case connections
+Where multiple files the processor shall handle batch operations

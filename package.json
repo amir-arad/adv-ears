@@ -1,0 +1,47 @@
+{
+  "name": "adv-ears",
+  "version": "0.1.0",
+  "description": "Formal requirements language tool that automatically generates UML diagrams from structured natural language requirements",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "test": "tsx --test tests/**/*.test.ts",
+    "test:watch": "tsx --test --watch tests/**/*.test.ts",
+    "lint": "eslint src/**/*.ts",
+    "lint:fix": "eslint src/**/*.ts --fix",
+    "typecheck": "tsc --noEmit",
+    "clean": "rm -rf dist",
+    "cli": "node dist/cli.js",
+    "knip": "knip"
+  },
+  "keywords": [
+    "requirements",
+    "uml",
+    "parser",
+    "formal-language",
+    "diagram-generation"
+  ],
+  "author": "Adv-EARS",
+  "license": "MIT",
+  "dependencies": {
+    "chevrotain": "^11.0.3",
+    "commander": "^12.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "@typescript-eslint/eslint-plugin": "^6.19.0",
+    "@typescript-eslint/parser": "^6.19.0",
+    "eslint": "^8.56.0",
+    "knip": "^5.62.0",
+    "tsx": "^4.7.0",
+    "typescript": "^5.3.0"
+  },
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "workspaces": [
+    "packages/*"
+  ]
+}

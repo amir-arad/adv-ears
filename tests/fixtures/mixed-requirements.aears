@@ -1,0 +1,13 @@
+The parser shall tokenize aears files
+When syntax error detected the parser shall report error location
+The parser shall not crash on malformed input
+While parsing active the error handler shall collect issues
+If malformed syntax then the parser shall provide recovery suggestions
+Where multiple files the processor shall handle batch operations
+
+The language server shall provide syntax validation
+When hover requested the language server shall display entity information
+The language server shall not block the UI thread
+While editing active the validation shall run continuously
+If file not aears format then the extension shall show warning
+Where LSP client connected the language server shall send diagnostics

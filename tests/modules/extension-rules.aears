@@ -1,0 +1,4 @@
+The extension shall register aears file association
+The extension shall provide syntax highlighting
+When command invoked the extension shall generate UML diagram
+IF file not aears format THEN the extension shall show warning

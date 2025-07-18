@@ -1,0 +1,12 @@
+The parser shall tokenize aears files
+The parser shall generate AST from tokens
+The language server shall provide syntax validation
+The language server shall offer auto completion
+The extension shall register aears file association
+The extension shall provide syntax highlighting
+The generator shall extract actors from entities
+The generator shall extract use cases from functionalities
+The cli shall accept aears file input
+The file reader shall load aears content
+The output writer shall save generated diagrams
+The error reporter shall provide line numbers

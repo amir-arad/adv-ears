@@ -1,0 +1,6 @@
+The parser shall not crash on malformed input
+The system shall not expose sensitive data
+The language server shall not block the UI thread
+The extension shall not corrupt existing files
+The generator shall not lose requirement information
+The cli shall not continue with invalid input

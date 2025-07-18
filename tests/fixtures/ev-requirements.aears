@@ -1,0 +1,8 @@
+When syntax error detected the parser shall report error location
+When hover requested the language server shall display entity information
+When command invoked the extension shall generate UML diagram
+When AST parsed the generator shall create PlantUML output
+When validation requested the cli shall check syntax
+When generation requested the cli shall output UML
+When error occurs the system shall preserve partial results
+When file changed the watcher shall trigger reprocessing
