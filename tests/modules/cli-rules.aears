@@ -1,4 +1,14 @@
 The cli shall accept aears file input
 When validation requested the cli shall check syntax
 When generation requested the cli shall output UML
+The cli shall generate PlantUML format by default
+When report format requested the cli shall output text analysis
+When title flag provided the cli shall include diagram title
+When stats flag provided the cli shall include requirement statistics
+When no-relationships flag provided the cli shall exclude actor relationships
+When output file specified the cli shall save generated content to file
+The cli shall extract actors from entities in UML output
+The cli shall extract use cases from functionalities in UML output
+The cli shall create relationships between actors and use cases
+IF generation fails THEN the cli shall exit with error code
 IF file invalid THEN the cli shall exit with error code

@@ -116,7 +116,118 @@ describe('CLI Rules Implementation', () => {
   });
 
   describe('When generation requested the cli shall output UML', () => {
+    it('should generate UML output when requested', async () => {
+      const result = await cli(['generate', validFile]);
+      assert.strictEqual(result.exitCode, 0);
+      assert.ok(result.stdout.includes('@startuml'));
+      assert.ok(result.stdout.includes('@enduml'));
+    });
+  });
 
+  describe('The cli shall generate PlantUML format by default', () => {
+    it('should output PlantUML format by default', async () => {
+      const result = await cli(['generate', validFile]);
+      assert.strictEqual(result.exitCode, 0);
+      assert.ok(result.stdout.includes('@startuml'));
+      assert.ok(result.stdout.includes('!-- Actors --'));
+      assert.ok(result.stdout.includes('!-- Use Cases --'));
+      assert.ok(result.stdout.includes('!-- Relationships --'));
+    });
+  });
+
+  describe('When report format requested the cli shall output text analysis', () => {
+    it('should output text report when report format requested', async () => {
+      const result = await cli(['generate', validFile, '-f', 'report']);
+      assert.strictEqual(result.exitCode, 0);
+      assert.ok(result.stdout.includes('=== EARS Requirements Analysis Report ==='));
+      assert.ok(result.stdout.includes('Total Requirements:'));
+      assert.ok(result.stdout.includes('Actors Identified:'));
+      assert.ok(result.stdout.includes('Use Cases Identified:'));
+    });
+  });
+
+  describe('When title flag provided the cli shall include diagram title', () => {
+    it('should include title when title flag provided', async () => {
+      const result = await cli(['generate', validFile, '--title']);
+      assert.strictEqual(result.exitCode, 0);
+      assert.ok(result.stdout.includes('title Requirements Use Case Diagram'));
+    });
+  });
+
+  describe('When stats flag provided the cli shall include requirement statistics', () => {
+    it('should include statistics when stats flag provided', async () => {
+      const result = await cli(['generate', validFile, '--stats']);
+      assert.strictEqual(result.exitCode, 0);
+      assert.ok(result.stdout.includes('!-- Statistics --'));
+      assert.ok(result.stdout.includes('Requirements Statistics:'));
+      assert.ok(result.stdout.includes('note right'));
+    });
+  });
+
+  describe('When no-relationships flag provided the cli shall exclude actor relationships', () => {
+    it('should exclude relationships when no-relationships flag provided', async () => {
+      const result = await cli(['generate', validFile, '--no-relationships']);
+      assert.strictEqual(result.exitCode, 0);
+      assert.ok(result.stdout.includes('@startuml'));
+      assert.ok(result.stdout.includes('!-- Actors --'));
+      assert.ok(result.stdout.includes('!-- Use Cases --'));
+      assert.ok(!result.stdout.includes('!-- Relationships --'));
+    });
+  });
+
+  describe('When output file specified the cli shall save generated content to file', () => {
+    it('should save to file when output specified', async () => {
+      const outputFile = join(tmpdir(), 'test-output.puml');
+      const result = await cli(['generate', validFile, '-o', outputFile]);
+      assert.strictEqual(result.exitCode, 0);
+      assert.ok(result.stdout.includes('✓ PlantUML written to'));
+      assert.ok(existsSync(outputFile));
+      // Clean up
+      if (existsSync(outputFile)) unlinkSync(outputFile);
+    });
+  });
+
+  describe('The cli shall extract actors from entities in UML output', () => {
+    it('should extract and display actors in UML output', async () => {
+      const result = await cli(['generate', validFile]);
+      assert.strictEqual(result.exitCode, 0);
+      assert.ok(result.stdout.includes('actor "parser"'));
+      assert.ok(result.stdout.includes('!-- Actors --'));
+    });
+  });
+
+  describe('The cli shall extract use cases from functionalities in UML output', () => {
+    it('should extract and display use cases in UML output', async () => {
+      const result = await cli(['generate', validFile]);
+      assert.strictEqual(result.exitCode, 0);
+      assert.ok(result.stdout.includes('usecase "tokenize aears files"'));
+      assert.ok(result.stdout.includes('usecase "report error location"'));
+      assert.ok(result.stdout.includes('!-- Use Cases --'));
+    });
+  });
+
+  describe('The cli shall create relationships between actors and use cases', () => {
+    it('should create relationships between actors and use cases', async () => {
+      const result = await cli(['generate', validFile]);
+      assert.strictEqual(result.exitCode, 0);
+      assert.ok(result.stdout.includes('!-- Relationships --'));
+      assert.ok(result.stdout.includes('parser --> UC1'));
+      assert.ok(result.stdout.includes('parser ..> UC2'));
+    });
+  });
+
+  describe('IF generation fails THEN the cli shall exit with error code', () => {
+    it('should exit with error code for invalid syntax during generation', async () => {
+      const result = await cli(['generate', invalidFile]);
+      assert.strictEqual(result.exitCode, 1);
+      assert.ok(result.stderr.includes('✗ Generation failed'));
+    });
+
+    it('should exit with error code for non-aears file during generation', async () => {
+      const result = await cli(['generate', nonAearsFile]);
+      assert.strictEqual(result.exitCode, 1);
+      assert.ok(result.stderr.includes('File must have .aears extension'));
+    });
   });
 
   describe('IF file invalid THEN the cli shall exit with error code', () => {
