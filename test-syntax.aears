@@ -1,0 +1,38 @@
+# AEARS Syntax Highlighting Test File
+# This file contains examples of all AEARS requirement types for testing syntax highlighting
+
+# UB - Basic requirements
+The system shall authenticate users
+The user shall provide credentials
+The application shall store data
+
+# EV - Event-driven requirements  
+When login attempted the system shall validate credentials
+When user clicks button the interface shall respond
+When error occurs the system shall log details
+
+# UW - Unwanted behavior
+The system shall not allow unauthorized access
+The application shall not store passwords in plain text
+The user shall not bypass security measures
+
+# ST - State-driven requirements
+While session active the system shall maintain state
+While user authenticated the application shall show dashboard
+While processing the system shall display progress
+
+# OP - Conditional requirements (If/Then)
+If user authenticated then the system shall grant access
+If error detected then the application shall show warning
+If timeout reached then the system shall disconnect user
+
+# OP - Conditional requirements (Where)
+Where security enabled the system shall encrypt data
+Where admin privileges the user shall access settings
+Where backup scheduled the system shall save files
+
+# Test case variations and edge cases
+THE SYSTEM SHALL WORK IN UPPERCASE
+the system shall work in lowercase
+If User Authenticated Then The System Shall Grant Access
+when LOGIN ATTEMPTED the SYSTEM shall VALIDATE credentials

@@ -28,6 +28,13 @@
         "configuration": "./language-configuration.json"
       }
     ],
+    "grammars": [
+      {
+        "language": "aears",
+        "scopeName": "source.aears",
+        "path": "./syntaxes/aears.tmGrammar.json"
+      }
+    ],
     "configuration": {
       "type": "object",
       "title": "AEARS Language Server",

@@ -1,0 +1,93 @@
+{
+  "scopeName": "source.aears",
+  "name": "AEARS",
+  "fileTypes": ["aears"],
+  "patterns": [
+    { "include": "#requirement-ev" },
+    { "include": "#requirement-st" },
+    { "include": "#requirement-op-if" },
+    { "include": "#requirement-op-where" },
+    { "include": "#requirement-uw" },
+    { "include": "#requirement-ub" },
+    { "include": "#comments" }
+  ],
+  "repository": {
+    "requirement-ev": {
+      "comment": "Event-driven requirements: When <precondition> the <entity> shall <functionality>",
+      "match": "(?i)^\\s*(When)\\s+(.+?)\\s+(the)\\s+(.+?)\\s+(shall)\\s+(.+)$",
+      "captures": {
+        "1": { "name": "keyword.control.when.aears" },
+        "2": { "name": "string.unquoted.precondition.aears" },
+        "3": { "name": "punctuation.definition.article.aears" },
+        "4": { "name": "entity.name.type.aears" },
+        "5": { "name": "keyword.operator.shall.aears" },
+        "6": { "name": "string.unquoted.functionality.aears" }
+      }
+    },
+    "requirement-st": {
+      "comment": "State-driven requirements: While <state> the <entity> shall <functionality>",
+      "match": "(?i)^\\s*(While)\\s+(.+?)\\s+(the)\\s+(.+?)\\s+(shall)\\s+(.+)$",
+      "captures": {
+        "1": { "name": "keyword.control.while.aears" },
+        "2": { "name": "string.unquoted.state.aears" },
+        "3": { "name": "punctuation.definition.article.aears" },
+        "4": { "name": "entity.name.type.aears" },
+        "5": { "name": "keyword.operator.shall.aears" },
+        "6": { "name": "string.unquoted.functionality.aears" }
+      }
+    },
+    "requirement-op-if": {
+      "comment": "Conditional requirements: If <condition> then the <entity> shall <functionality>",
+      "match": "(?i)^\\s*(If)\\s+(.+?)\\s+(then)\\s+(the)\\s+(.+?)\\s+(shall)\\s+(.+)$",
+      "captures": {
+        "1": { "name": "keyword.control.if.aears" },
+        "2": { "name": "string.unquoted.condition.aears" },
+        "3": { "name": "keyword.control.then.aears" },
+        "4": { "name": "punctuation.definition.article.aears" },
+        "5": { "name": "entity.name.type.aears" },
+        "6": { "name": "keyword.operator.shall.aears" },
+        "7": { "name": "string.unquoted.functionality.aears" }
+      }
+    },
+    "requirement-op-where": {
+      "comment": "Where-conditional requirements: Where <condition> the <entity> shall <functionality>",
+      "match": "(?i)^\\s*(Where)\\s+(.+?)\\s+(the)\\s+(.+?)\\s+(shall)\\s+(.+)$",
+      "captures": {
+        "1": { "name": "keyword.control.where.aears" },
+        "2": { "name": "string.unquoted.condition.aears" },
+        "3": { "name": "punctuation.definition.article.aears" },
+        "4": { "name": "entity.name.type.aears" },
+        "5": { "name": "keyword.operator.shall.aears" },
+        "6": { "name": "string.unquoted.functionality.aears" }
+      }
+    },
+    "requirement-uw": {
+      "comment": "Unwanted behavior: The <entity> shall not <functionality>",
+      "match": "(?i)^\\s*(The)\\s+(.+?)\\s+(shall)\\s+(not)\\s+(.+)$",
+      "captures": {
+        "1": { "name": "punctuation.definition.article.aears" },
+        "2": { "name": "entity.name.type.aears" },
+        "3": { "name": "keyword.operator.shall.aears" },
+        "4": { "name": "keyword.operator.not.aears" },
+        "5": { "name": "string.unquoted.functionality.negative.aears" }
+      }
+    },
+    "requirement-ub": {
+      "comment": "Basic requirements: The <entity> shall <functionality>",
+      "match": "(?i)^\\s*(The)\\s+(.+?)\\s+(shall)\\s+(.+)$",
+      "captures": {
+        "1": { "name": "punctuation.definition.article.aears" },
+        "2": { "name": "entity.name.type.aears" },
+        "3": { "name": "keyword.operator.shall.aears" },
+        "4": { "name": "string.unquoted.functionality.aears" }
+      }
+    },
+    "comments": {
+      "comment": "Line comments starting with #",
+      "match": "^\\s*(#.*)$",
+      "captures": {
+        "1": { "name": "comment.line.number-sign.aears" }
+      }
+    }
+  }
+}
