@@ -3,40 +3,8 @@ import { existsSync, unlinkSync, writeFileSync } from 'node:fs';
 
 import assert from 'node:assert';
 import { join } from 'node:path';
-import { spawn } from 'node:child_process';
 import { tmpdir } from 'node:os';
-
-// CLI Test Helper - runs CLI commands and captures output/exit codes
-async function cli(args: string[]): Promise<{
-  exitCode: number;
-  stdout: string;
-  stderr: string;
-}> {
-  return new Promise((resolve) => {
-    const child = spawn('node', ['dist/cli/cli.js', ...args], {
-      stdio: ['pipe', 'pipe', 'pipe']
-    });
-
-    let stdout = '';
-    let stderr = '';
-
-    child.stdout.on('data', (data) => {
-      stdout += data.toString();
-    });
-
-    child.stderr.on('data', (data) => {
-      stderr += data.toString();
-    });
-
-    child.on('close', (code) => {
-      resolve({
-        exitCode: code || 0,
-        stdout,
-        stderr
-      });
-    });
-  });
-}
+import { cli } from '../helpers/cli-driver.js';
 
 // Test fixtures
 const VALID_AEARS_CONTENT = `The parser shall tokenize aears files

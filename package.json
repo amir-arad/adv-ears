@@ -3,19 +3,22 @@
   "version": "0.1.0",
   "description": "Formal requirements language tool that automatically generates UML diagrams from structured natural language requirements",
   "type": "module",
+  "bin": "dist/cli.js",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc",
     "dev": "tsc --watch",
-    "check": "npm run lint && npm run typecheck && prettier --check \"src/**/*\" && npm test",
+    "check": "npm run lint && npm run typecheck && npm run format:check && npm test && npm run knip && echo 'All checks passed!'",
     "test": "tsx --test tests/**/*.test.ts",
     "test:watch": "tsx --test --watch tests/**/*.test.ts",
     "lint": "eslint src/**/*.ts",
     "lint:fix": "eslint src/**/*.ts --fix",
+    "format": "prettier --write \"src/**/*.{ts,js,json}\"",
+    "format:check": "prettier --check \"src/**/*.{ts,js,json}\"",
     "typecheck": "tsc --noEmit",
     "clean": "rm -rf dist",
-    "start": "node dist/cli/cli.js",
+    "start": "node dist/cli.js",
     "knip": "knip"
   },
   "keywords": [
@@ -28,12 +31,12 @@
   "author": "Amir Arad <greenshade@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "chevrotain": "^11.0.3",
     "commander": "^12.0.0",
     "vscode-languageserver": "^9.0.1",
     "vscode-languageserver-textdocument": "^1.0.11"
   },
   "devDependencies": {
+    "@eslint/js": "^9.0.0",
     "@types/node": "^20.11.0",
     "@typescript-eslint/eslint-plugin": "^6.19.0",
     "@typescript-eslint/parser": "^6.19.0",

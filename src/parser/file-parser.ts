@@ -1,7 +1,7 @@
-import { SimpleParser } from './simple-parser.js';
 import { DocumentNode } from '../types/ast-types.js';
+import { SimpleParser } from './simple-parser.js';
 
-export interface ParseResult {
+interface ParseResult {
   ast?: DocumentNode;
   errors: string[];
   warnings: string[];

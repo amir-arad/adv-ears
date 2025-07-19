@@ -1,25 +1,25 @@
 import {
   Diagnostic,
   DiagnosticSeverity,
-  HoverParams,
   Hover,
+  HoverParams,
 } from 'vscode-languageserver/node.js';
-
-import { TextDocument } from 'vscode-languageserver-textdocument';
-import { parseAearsFile } from '../parser/file-parser.js';
-import { ASTGenerator } from '../ast/ast-generator.js';
+import { createRange, getWordRangeAtPosition } from './utils.js';
 import {
-  getKeywordHover,
   getActorHover,
+  getKeywordHover,
   getUseCaseHover,
 } from './hover-providers.js';
-import { createRange, getWordRangeAtPosition } from './utils.js';
+
+import { ASTGenerator } from '../ast/ast-generator.js';
+import { TextDocument } from 'vscode-languageserver-textdocument';
+import { parseAearsFile } from '../parser/file-parser.js';
 
 export interface LSPSettings {
   maxNumberOfProblems: number;
 }
 
-export interface ValidationResult {
+interface ValidationResult {
   diagnostics: Diagnostic[];
   success: boolean;
 }

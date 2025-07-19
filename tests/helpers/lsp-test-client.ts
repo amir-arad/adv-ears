@@ -5,21 +5,21 @@
  * instead of implementing custom JSON-RPC parsing.
  */
 
-import { spawn, ChildProcess } from 'node:child_process';
-import { createMessageConnection, StreamMessageReader, StreamMessageWriter } from 'vscode-jsonrpc/node';
-import { 
-  InitializeParams, 
-  InitializeResult, 
-  CompletionParams,
-  CompletionList,
+import { ChildProcess, spawn } from 'node:child_process';
+import {
   CompletionItem,
-  HoverParams,
-  Hover,
-  DidOpenTextDocumentParams,
+  CompletionList,
+  CompletionParams,
   DidChangeTextDocumentParams,
-  PublishDiagnosticsParams,
-  MessageConnection
+  DidOpenTextDocumentParams,
+  Hover,
+  HoverParams,
+  InitializeParams,
+  InitializeResult,
+  MessageConnection,
+  PublishDiagnosticsParams
 } from 'vscode-languageserver-protocol';
+import { StreamMessageReader, StreamMessageWriter, createMessageConnection } from 'vscode-jsonrpc/node';
 
 export interface LSPTestOptions {
   serverCommand?: string[];
@@ -35,7 +35,7 @@ export class LSPTestClient {
 
   constructor(private options: LSPTestOptions = {}) {
     this.options = {
-      serverCommand: ['node', 'dist/cli/cli.js', 'lsp', '--stdio'],
+      serverCommand: ['npx', 'tsx', 'src/cli.ts', 'lsp', '--stdio'],
       timeout: 5000,
       workspaceRoot: 'file:///test-workspace',
       ...options
@@ -291,7 +291,7 @@ export class LSPTestClient {
  */
 export function createLSPTestClient(options: Partial<LSPTestOptions> = {}): LSPTestClient {
   return new LSPTestClient({
-    serverCommand: ['node', 'dist/cli/cli.js', 'lsp', '--stdio'],
+    serverCommand: ['npx', 'tsx', 'src/cli.ts', 'lsp', '--stdio'],
     timeout: 5000,
     workspaceRoot: 'file:///test-workspace',
     ...options

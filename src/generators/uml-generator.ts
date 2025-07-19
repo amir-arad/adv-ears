@@ -1,14 +1,15 @@
-import { DocumentNode } from '../types/ast-types.js';
 import {
-  sanitizeForPlantUML,
   actorAlias,
-  getRelationshipType,
   extractActors,
   extractUseCases,
+  getRelationshipType,
   getStatistics,
+  sanitizeForPlantUML,
 } from './uml-utils.js';
 
-export interface UMLGeneratorOptions {
+import { DocumentNode } from '../types/ast-types.js';
+
+interface UMLGeneratorOptions {
   includeTitle?: boolean;
   includeStatistics?: boolean;
   includeRelationships?: boolean;
