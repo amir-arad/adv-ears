@@ -122,3 +122,5 @@ knip-report.json
 
 # ESLint cache
 .eslintcache
+.vscode/extensions/aears-language-server/client/*
+!.vscode/extensions/aears-language-server/client/*.ts

@@ -1,0 +1,66 @@
+{
+  "name": "aears-language-server",
+  "displayName": "AEARS Language Server",
+  "description": "Language server for AEARS requirement files",
+  "version": "0.1.0",
+  "publisher": "aears",
+  "engines": {
+    "vscode": "^1.74.0"
+  },
+  "categories": [
+    "Programming Languages"
+  ],
+  "activationEvents": [
+    "onLanguage:aears"
+  ],
+  "main": "./client/extension.js",
+  "contributes": {
+    "languages": [
+      {
+        "id": "aears",
+        "aliases": [
+          "AEARS",
+          "aears"
+        ],
+        "extensions": [
+          ".aears"
+        ],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "configuration": {
+      "type": "object",
+      "title": "AEARS Language Server",
+      "properties": {
+        "aearsLanguageServer.maxNumberOfProblems": {
+          "scope": "resource",
+          "type": "number",
+          "default": 1000,
+          "description": "Maximum number of problems reported by the AEARS language server"
+        },
+        "aearsLanguageServer.trace.server": {
+          "scope": "window",
+          "type": "string",
+          "enum": [
+            "off",
+            "messages",
+            "verbose"
+          ],
+          "default": "off",
+          "description": "Traces the communication between VS Code and the language server"
+        }
+      }
+    }
+  },
+  "dependencies": {
+    "vscode-languageclient": "^8.1.0"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.74.0",
+    "typescript": "^5.0.0"
+  },
+  "scripts": {
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./"
+  }
+}

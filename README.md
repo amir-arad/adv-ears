@@ -66,13 +66,13 @@ If user authenticated then the system shall grant access
 ### 2. Validate the file
 
 ```bash
-npm run start validate example.aears
+npm start validate example.aears
 ```
 
 ### 3. Generate UML diagram
 
 ```bash
-npm run start generate example.aears --title --stats
+npm start generate example.aears --title --stats
 ```
 
 Output:
@@ -158,7 +158,7 @@ The CLI provides five main commands for working with AEARS files:
 Validate AEARS file syntax:
 
 ```bash
-npm run start validate <file.aears> [options]
+npm start validate <file.aears> [options]
 
 Options:
   -v, --verbose    Show detailed output including statistics and actors
@@ -167,10 +167,10 @@ Options:
 **Examples:**
 ```bash
 # Basic validation
-npm run start validate requirements.aears
+npm start validate requirements.aears
 
 # Verbose output with statistics
-npm run start validate requirements.aears --verbose
+npm start validate requirements.aears --verbose
 ```
 
 ### `parse` - AST Generation
@@ -178,7 +178,7 @@ npm run start validate requirements.aears --verbose
 Parse AEARS files and output the Abstract Syntax Tree:
 
 ```bash
-npm run start parse <file.aears> [options]
+npm start parse <file.aears> [options]
 
 Options:
   -o, --output <file>    Output file (default: stdout)
@@ -188,10 +188,10 @@ Options:
 **Examples:**
 ```bash
 # Pretty-printed AST to console
-npm run start parse requirements.aears
+npm start parse requirements.aears
 
 # JSON output to file
-npm run start parse requirements.aears --format json --output ast.json
+npm start parse requirements.aears --format json --output ast.json
 ```
 
 ### `generate` - UML Generation
@@ -199,7 +199,7 @@ npm run start parse requirements.aears --format json --output ast.json
 Generate UML diagrams from AEARS files:
 
 ```bash
-npm run start generate <file.aears> [options]
+npm start generate <file.aears> [options]
 
 Options:
   -o, --output <file>           Output file (default: stdout)
@@ -212,13 +212,13 @@ Options:
 **Examples:**
 ```bash
 # Basic PlantUML generation
-npm run start generate requirements.aears
+npm start generate requirements.aears
 
 # Full-featured diagram with title and stats
-npm run start generate requirements.aears --title --stats --output diagram.puml
+npm start generate requirements.aears --title --stats --output diagram.puml
 
 # Text report instead of UML
-npm run start generate requirements.aears --format report
+npm start generate requirements.aears --format report
 ```
 
 ### `analyze` - Requirements Analysis
@@ -226,7 +226,7 @@ npm run start generate requirements.aears --format report
 Analyze AEARS files and show detailed metrics:
 
 ```bash
-npm run start analyze <file.aears>
+npm start analyze <file.aears>
 ```
 
 **Output includes:**
@@ -240,7 +240,7 @@ npm run start analyze <file.aears>
 Start the Language Server Protocol server:
 
 ```bash
-npm run start lsp [options]
+npm start lsp [options]
 
 Options:
   --stdio              Use stdio for communication
@@ -268,14 +268,21 @@ The AEARS Language Server provides rich IDE support with real-time features:
 - **Diagnostics**: Live error reporting with detailed messages
 - **Continuous Validation**: Updates validation as you type
 
-### VS Code Integration
+### VS Code Extension (Development)
 
-1. Start the language server:
+For local development with full VS Code integration:
+
+1. **Build the project**: `npm run build`
+2. **Setup extension**:
    ```bash
-   npm run start lsp --stdio
+   cd .vscode/extensions/aears-language-server
+   npm install
+   npm run compile
    ```
+3. **Launch extension**: Press `F5` in VS Code to open Extension Development Host
+4. **Test**: Open `.aears` files in the new window to test language server features
 
-2. Configure your VS Code settings to use the AEARS language server for `.aears` files.
+The extension provides syntax highlighting, error diagnostics, and auto-completion for AEARS files.
 
 ### LSP Capabilities
 
