@@ -1,0 +1,4 @@
+The library shall return BatchResult array when user calls processBatch
+The library shall return partial results with error details when batch processing fails
+When user calls processStream the library shall invoke callback with partial results
+When streaming complete the library shall invoke callback with final result

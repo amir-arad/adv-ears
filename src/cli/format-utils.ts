@@ -32,14 +32,16 @@ export function formatASTForDisplay(ast: DocumentNode): string {
   return output;
 }
 
-export function printMissingRequirementWarnings(stats: Record<string, number>): void {
+export function printMissingRequirementWarnings(
+  stats: Record<string, number>
+): void {
   const warningChecks = [
     { key: 'UB', message: 'No ubiquitous requirements found' },
     { key: 'EV', message: 'No event-driven requirements found' },
     { key: 'UW', message: 'No unwanted behavior requirements found' },
     { key: 'ST', message: 'No state-driven requirements found' },
     { key: 'OP', message: 'No optional requirements found' },
-    { key: 'HY', message: 'No hybrid requirements found' }
+    { key: 'HY', message: 'No hybrid requirements found' },
   ];
 
   warningChecks.forEach(check => {

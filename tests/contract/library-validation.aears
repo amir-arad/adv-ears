@@ -1,0 +1,8 @@
+The library shall throw ValidationError when invalid input provided
+The library shall throw ValidationError with message and details when validation fails
+The library shall throw ProcessingError with cause and context when processing fails
+The library shall throw ConfigurationError with invalid fields when configuration invalid
+The library shall return ValidationResult when user calls validateRequirement
+The library shall return boolean when user calls validateInput
+The library shall provide valid errors and warnings when validation result returned
+Where type checking enabled the library shall validate at compile time

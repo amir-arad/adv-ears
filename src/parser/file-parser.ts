@@ -18,15 +18,15 @@ export function parseAearsFile(content: string): ParseResult {
       ast,
       success: true,
       errors: [],
-      warnings: []
+      warnings: [],
     };
-
   } catch (error) {
     return {
       success: false,
-      errors: [error instanceof Error ? error.message : 'Unknown parsing error'],
-      warnings: []
+      errors: [
+        error instanceof Error ? error.message : 'Unknown parsing error',
+      ],
+      warnings: [],
     };
   }
 }
-

@@ -1,0 +1,6 @@
+The library shall return QualityReport when user calls analyzeQuality
+The library shall return CoverageReport when user calls analyzeCoverage
+The library shall cache processing results when user calls enableCache
+The library shall remove cached data when user calls clearCache
+The library shall return cache metrics when user calls getCacheStats
+The library shall accept domains maxRequirements minQuality and outputFormat when ProcessingOptions provided

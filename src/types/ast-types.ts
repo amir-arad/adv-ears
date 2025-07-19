@@ -5,7 +5,7 @@ export enum RequirementType {
   UW = 'UW', // Unwanted behavior - The <entity> shall not <functionality>
   ST = 'ST', // State-driven - While <state> the <entity> shall <functionality>
   OP = 'OP', // Optional - If <condition> then the <entity> shall <functionality>
-  HY = 'HY'  // Hybrid - Complex conditional statements
+  HY = 'HY', // Hybrid - Complex conditional statements
 }
 
 export interface ASTNode {

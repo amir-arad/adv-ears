@@ -1,0 +1,291 @@
+import { describe, test, after } from 'node:test';
+import { strict as assert } from 'node:assert';
+import { spawn } from 'node:child_process';
+import { writeFileSync, unlinkSync, existsSync } from 'node:fs';
+import { join } from 'node:path';
+import { exec } from 'node:child_process';
+import { promisify } from 'node:util';
+
+const execAsync = promisify(exec);
+
+// LSP Integration Test - tests actual LSP server behavior through integration
+describe('LSP Server Integration Tests', () => {
+  const testAearsFile = join(process.cwd(), 'test-lsp.aears');
+
+  // Clean up test files
+  const cleanup = () => {
+    try {
+      if (existsSync(testAearsFile)) unlinkSync(testAearsFile);
+    } catch (error) {
+      // Ignore cleanup errors
+    }
+  };
+
+  after(() => {
+    cleanup();
+  });
+
+  test('The language server shall provide syntax validation', async () => {
+    cleanup();
+    
+    const validContent = 'The system shall authenticate users';
+    const invalidContent = 'Invalid AEARS syntax here';
+    
+    writeFileSync(testAearsFile, validContent);
+    
+    try {
+      // Test that LSP server starts and handlers work correctly
+      const { validateDocument } = await import('../../src/lsp/handlers.js');
+      const { createTextDocument } = await import('../../src/lsp/mocks.js');
+      
+      const validDocument = createTextDocument(`file://${testAearsFile}`, validContent);
+      const invalidDocument = createTextDocument(`file://${testAearsFile}`, invalidContent);
+      const settings = { maxNumberOfProblems: 1000 };
+      
+      // Test validation of valid content
+      const validResult = validateDocument(validDocument, settings, false);
+      assert.strictEqual(validResult.success, true, 'Valid AEARS content should validate successfully');
+      assert.strictEqual(validResult.diagnostics.length, 0, 'Valid content should have no diagnostics');
+      
+      // Test validation of invalid content
+      const invalidResult = validateDocument(invalidDocument, settings, false);
+      assert.strictEqual(invalidResult.success, false, 'Invalid AEARS content should fail validation');
+      assert.ok(invalidResult.diagnostics.length > 0, 'Invalid content should have diagnostics');
+      assert.strictEqual(invalidResult.diagnostics[0].source, 'aears-lsp', 'Diagnostics should be from aears-lsp');
+      
+      // Test LSP server starts via CLI
+      const lspProcess = spawn('node', ['dist/cli/cli.js', 'lsp', '--help'], {
+        stdio: ['pipe', 'pipe', 'pipe'],
+        timeout: 2000
+      });
+
+      let stdout = '';
+      let stderr = '';
+
+      lspProcess.stdout.on('data', (data) => {
+        stdout += data.toString();
+      });
+
+      lspProcess.stderr.on('data', (data) => {
+        stderr += data.toString();
+      });
+
+      const result = await new Promise<{ exitCode: number; stdout: string; stderr: string }>((resolve) => {
+        const timeout = setTimeout(() => {
+          lspProcess.kill();
+          resolve({ exitCode: -1, stdout, stderr: stderr + '\nTimeout' });
+        }, 2000);
+
+        lspProcess.on('close', (code) => {
+          clearTimeout(timeout);
+          resolve({ exitCode: code || 0, stdout, stderr });
+        });
+      });
+
+      // Should show LSP help information
+      assert.strictEqual(result.exitCode, 0, 'LSP help command should succeed');
+      const output = result.stdout + result.stderr;
+      assert.ok(output.includes('Language Server Protocol') || output.includes('lsp'), 'Should show LSP information');
+      
+    } finally {
+      cleanup();
+    }
+  });
+
+  test('The language server shall offer auto-completion', async () => {
+    try {
+      // Test completion handlers are available and functional
+      const { getCompletionItems, resolveCompletionItem } = await import('../../src/lsp/handlers.js');
+      
+      const params = {
+        textDocument: { uri: 'file:///test.aears' },
+        position: { line: 0, character: 0 }
+      };
+      
+      const completions = getCompletionItems(params);
+      
+      // Should provide AEARS keyword completions
+      assert.ok(Array.isArray(completions), 'Should return completion array');
+      assert.ok(completions.length > 0, 'Should provide completion items');
+      
+      const keywordLabels = completions.map(c => c.label);
+      const expectedKeywords = ['The', 'When', 'While', 'If', 'Where', 'shall'];
+      expectedKeywords.forEach(keyword => {
+        assert.ok(keywordLabels.includes(keyword), `Should include "${keyword}" keyword`);
+      });
+      
+      // Test completion resolution
+      const firstCompletion = completions[0];
+      const resolved = resolveCompletionItem(firstCompletion);
+      assert.ok(resolved.documentation, 'Resolved completion should have documentation');
+      
+    } catch (error) {
+      assert.fail(`LSP completion handlers should be available and functional: ${error}`);
+    }
+  });
+
+  test('When hover requested the language server shall display entity information', async () => {
+    try {
+      // Test hover functionality works correctly
+      const { getHoverInfo } = await import('../../src/lsp/handlers.js');
+      const { createTextDocument } = await import('../../src/lsp/mocks.js');
+      
+      const content = 'The system shall authenticate users';
+      const document = createTextDocument('file:///test.aears', content);
+      
+      // Test hover on "The" keyword
+      const theParams = {
+        textDocument: { uri: 'file:///test.aears' },
+        position: { line: 0, character: 0 }
+      };
+      
+      const theHover = getHoverInfo(theParams, document);
+      assert.ok(theHover, 'Should return hover information for "The"');
+      assert.ok(theHover.contents, 'Hover should have contents');
+      const theContent = typeof theHover.contents === 'string' 
+        ? theHover.contents 
+        : theHover.contents.value;
+      assert.ok(theContent.includes('UB') || theContent.includes('Ubiquitous'), 'Should provide UB requirement type info');
+      
+      // Test hover on "system" (entity)
+      const systemParams = {
+        textDocument: { uri: 'file:///test.aears' },
+        position: { line: 0, character: 4 }
+      };
+      
+      const systemHover = getHoverInfo(systemParams, document);
+      if (systemHover) {
+        assert.ok(systemHover.contents, 'System hover should have contents');
+        const systemContent = typeof systemHover.contents === 'string' 
+          ? systemHover.contents 
+          : systemHover.contents.value;
+        assert.ok(systemContent.includes('Actor') || systemContent.includes('system'), 'Should provide actor information');
+      }
+      
+    } catch (error) {
+      assert.fail(`LSP hover handlers should be available and functional: ${error}`);
+    }
+  });
+
+  test('WHERE LSP client connected the language server shall send diagnostics', async () => {
+    try {
+      // Test diagnostic publishing capability
+      const { validateDocument } = await import('../../src/lsp/handlers.js');
+      const { createTextDocument } = await import('../../src/lsp/mocks.js');
+      
+      const invalidContent = 'This is invalid AEARS syntax without proper structure';
+      const document = createTextDocument('file:///test.aears', invalidContent);
+      const settings = { maxNumberOfProblems: 1000 };
+      
+      // Test diagnostic generation
+      const result = validateDocument(document, settings, false);
+      assert.strictEqual(result.success, false, 'Invalid content should fail validation');
+      assert.ok(result.diagnostics.length > 0, 'Should generate diagnostics for invalid content');
+      
+      const diagnostic = result.diagnostics[0];
+      assert.strictEqual(diagnostic.source, 'aears-lsp', 'Diagnostic should be from aears-lsp');
+      assert.ok(diagnostic.message, 'Diagnostic should have error message');
+      assert.ok(diagnostic.range, 'Diagnostic should have range');
+      assert.ok(typeof diagnostic.range.start.line === 'number', 'Range should have line number');
+      assert.ok(typeof diagnostic.range.start.character === 'number', 'Range should have character position');
+      
+      // Test related information capability
+      const resultWithRelated = validateDocument(document, settings, true);
+      assert.ok(resultWithRelated.diagnostics[0].relatedInformation, 'Should include related information when capability enabled');
+      
+    } catch (error) {
+      assert.fail(`LSP diagnostic handlers should be available and functional: ${error}`);
+    }
+  });
+
+  test('WHILE editing active the validation shall run continuously', async () => {
+    try {
+      // Test continuous validation through changing document content
+      const { validateDocument } = await import('../../src/lsp/handlers.js');
+      const { createTextDocument } = await import('../../src/lsp/mocks.js');
+      
+      const incompleteContent = 'The system shall'; // Incomplete
+      const completeContent = 'The system shall authenticate users'; // Complete
+      const settings = { maxNumberOfProblems: 1000 };
+      
+      // Simulate continuous validation as content changes
+      const incompleteDoc = createTextDocument('file:///test.aears', incompleteContent);
+      const completeDoc = createTextDocument('file:///test.aears', completeContent);
+      
+      const incompleteResult = validateDocument(incompleteDoc, settings, false);
+      const completeResult = validateDocument(completeDoc, settings, false);
+      
+      // Incomplete content should have validation issues
+      assert.strictEqual(incompleteResult.success, false, 'Incomplete content should fail validation');
+      
+      // Complete content should be valid
+      assert.strictEqual(completeResult.success, true, 'Complete content should pass validation');
+      assert.strictEqual(completeResult.diagnostics.length, 0, 'Complete content should have no diagnostics');
+      
+      // Should handle validation state changes
+      assert.ok(incompleteResult.diagnostics.length >= completeResult.diagnostics.length, 
+        'Incomplete content should have at least as many issues as complete content');
+      
+    } catch (error) {
+      assert.fail(`LSP continuous validation should work: ${error}`);
+    }
+  });
+
+  // Test actual LSP server startup and CLI integration
+  test('LSP Server CLI Integration', async () => {
+    // Test that LSP command is available in CLI
+    const { stdout: helpOutput, stderr: helpError } = await execAsync('node dist/cli/cli.js --help');
+    const output = helpOutput + helpError;
+    assert.ok(output.includes('lsp'), 'CLI should include lsp command');
+    
+    // Test LSP command help
+    const { stdout: lspHelp, stderr: lspError } = await execAsync('node dist/cli/cli.js lsp --help');
+    const lspOutput = lspHelp + lspError;
+    assert.ok(lspOutput.includes('Language Server Protocol') || lspOutput.includes('LSP'), 
+      'LSP command should show protocol information');
+    assert.ok(lspOutput.includes('--stdio'), 'Should support --stdio option');
+    assert.ok(lspOutput.includes('--socket'), 'Should support --socket option');
+    assert.ok(lspOutput.includes('--node-ipc'), 'Should support --node-ipc option');
+    
+    // Test LSP server startup doesn't crash (quick test)
+    const lspProcess = spawn('node', ['dist/cli/cli.js', 'lsp', '--stdio'], {
+      stdio: ['pipe', 'pipe', 'pipe']
+    });
+    
+    let started = false;
+    let errors = '';
+    
+    lspProcess.stderr.on('data', (data) => {
+      errors += data.toString();
+    });
+    
+    lspProcess.stdout.on('data', () => {
+      started = true;
+      lspProcess.kill(); // Kill immediately after it starts responding
+    });
+    
+    // Send a simple message to see if server responds
+    setTimeout(() => {
+      try {
+        lspProcess.stdin.write('Content-Length: 2\r\n\r\n{}');
+      } catch (e) {
+        // Ignore write errors
+      }
+    }, 100);
+    
+    const result = await new Promise<{ started: boolean; errors: string }>((resolve) => {
+      const timeout = setTimeout(() => {
+        lspProcess.kill();
+        resolve({ started, errors });
+      }, 1000);
+      
+      lspProcess.on('close', () => {
+        clearTimeout(timeout);
+        resolve({ started, errors });
+      });
+    });
+    
+    // Server should start without crashing (even if it doesn't respond to our simple message)
+    assert.ok(!result.errors.includes('Error starting LSP server'), 'LSP server should start without errors');
+  });
+});

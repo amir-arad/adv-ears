@@ -1,0 +1,6 @@
+The library shall return formatted string when user calls exportToMarkdown
+The library shall return JSON string when user calls exportToJSON
+The library shall return formatted output when user calls exportToStructured
+The library shall return string array when user calls getSupportedDomains
+The library shall return available EARS patterns when user calls getPatternTypes
+The library shall return available priority values when user calls getPriorityLevels

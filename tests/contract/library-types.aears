@@ -1,0 +1,3 @@
+The library shall provide complete TypeScript definitions when library imported
+The library shall export all public interfaces when types used
+Where generic types needed the library shall provide parameterized interfaces

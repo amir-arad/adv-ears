@@ -1,0 +1,3 @@
+The library shall update global settings when user calls setConfiguration
+The library shall return current settings when user calls getConfiguration
+The library shall restore defaults when user calls resetConfiguration

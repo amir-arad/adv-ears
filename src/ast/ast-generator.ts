@@ -1,8 +1,11 @@
-import { RequirementNode, DocumentNode, RequirementType } from '../types/ast-types.js';
+import {
+  RequirementNode,
+  DocumentNode,
+  RequirementType,
+} from '../types/ast-types.js';
 import { CSTDocument, CSTRequirement } from '../types/cst-types.js';
 
 export class ASTGenerator {
-
   // Convert CST to AST
   public generateAST(cst: CSTDocument): DocumentNode {
     const requirements: RequirementNode[] = [];
@@ -17,7 +20,7 @@ export class ASTGenerator {
 
     return {
       type: 'document',
-      requirements
+      requirements,
     };
   }
 
@@ -26,7 +29,7 @@ export class ASTGenerator {
       type: 'requirement',
       requirementType: req.requirementType,
       entity: req.entity,
-      functionality: req.functionality
+      functionality: req.functionality,
     };
 
     // Add optional fields based on requirement type
@@ -62,13 +65,15 @@ export class ASTGenerator {
   }
 
   // Helper method to extract use cases from requirements
-  public extractUseCases(ast: DocumentNode): Array<{actor: string, useCase: string}> {
-    const useCases: Array<{actor: string, useCase: string}> = [];
+  public extractUseCases(
+    ast: DocumentNode
+  ): Array<{ actor: string; useCase: string }> {
+    const useCases: Array<{ actor: string; useCase: string }> = [];
 
     for (const req of ast.requirements) {
       useCases.push({
         actor: req.entity,
-        useCase: req.functionality
+        useCase: req.functionality,
       });
     }
 
@@ -83,7 +88,7 @@ export class ASTGenerator {
       [RequirementType.UW]: 0,
       [RequirementType.ST]: 0,
       [RequirementType.OP]: 0,
-      [RequirementType.HY]: 0
+      [RequirementType.HY]: 0,
     };
 
     for (const req of ast.requirements) {

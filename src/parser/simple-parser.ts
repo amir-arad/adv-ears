@@ -1,10 +1,16 @@
-import { RequirementType, RequirementNode, DocumentNode } from '../types/ast-types.js';
+import {
+  RequirementType,
+  RequirementNode,
+  DocumentNode,
+} from '../types/ast-types.js';
 
 export class SimpleParser {
-
   // Simple regex-based parser for Phase 1 MVP
   parseDocument(content: string): DocumentNode {
-    const lines = content.split('\n').map(line => line.trim()).filter(line => line);
+    const lines = content
+      .split('\n')
+      .map(line => line.trim())
+      .filter(line => line);
     const requirements: RequirementNode[] = [];
 
     for (const line of lines) {
@@ -16,7 +22,7 @@ export class SimpleParser {
 
     return {
       type: 'document',
-      requirements
+      requirements,
     };
   }
 
@@ -31,7 +37,7 @@ export class SimpleParser {
         requirementType: RequirementType.EV,
         entity: match[2],
         functionality: match[3],
-        precondition: match[1]
+        precondition: match[1],
       };
     }
 
@@ -43,7 +49,7 @@ export class SimpleParser {
         requirementType: RequirementType.ST,
         entity: match[2],
         functionality: match[3],
-        state: match[1]
+        state: match[1],
       };
     }
 
@@ -55,7 +61,7 @@ export class SimpleParser {
         requirementType: RequirementType.OP,
         entity: match[2],
         functionality: match[3],
-        condition: match[1]
+        condition: match[1],
       };
     }
 
@@ -67,7 +73,7 @@ export class SimpleParser {
         requirementType: RequirementType.OP,
         entity: match[2],
         functionality: match[3],
-        condition: match[1]
+        condition: match[1],
       };
     }
 
@@ -79,7 +85,7 @@ export class SimpleParser {
         requirementType: RequirementType.UW,
         entity: match[1],
         functionality: match[2],
-        negated: true
+        negated: true,
       };
     }
 
@@ -90,7 +96,7 @@ export class SimpleParser {
         type: 'requirement',
         requirementType: RequirementType.UB,
         entity: match[1],
-        functionality: match[2]
+        functionality: match[2],
       };
     }
 

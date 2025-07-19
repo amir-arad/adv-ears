@@ -1,0 +1,10 @@
+The library shall return ExtractionResult when user calls processRequirements
+The library shall accept string or ProcessingInput when input parameter provided
+The library shall accept ProcessingOptions when options parameter provided
+The library shall throw ProcessingError with error details when processing fails
+The library shall return complete result object when processing succeeds
+The library shall accept text string context and metadata when ProcessingInput used
+The library shall treat string input as text property
+Where domains specified the library shall filter to requested domains
+Where maxRequirements specified the library shall limit output size
+The library shall use default configuration when options omitted

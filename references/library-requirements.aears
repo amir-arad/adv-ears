@@ -1,0 +1,50 @@
+The library shall return ExtractionResult when user calls processRequirements
+The library shall accept string or ProcessingInput when input parameter provided
+The library shall accept ProcessingOptions when options parameter provided
+The library shall throw ProcessingError with error details when processing fails
+The library shall return complete result object when processing succeeds
+The library shall accept text string context and metadata when ProcessingInput used
+The library shall treat string input as text property
+The library shall throw ValidationError when invalid input provided
+The library shall accept domains maxRequirements minQuality and outputFormat when ProcessingOptions provided
+Where domains specified the library shall filter to requested domains
+Where maxRequirements specified the library shall limit output size
+The library shall use default configuration when options omitted
+The library shall provide requirements groups metrics and coverage when returning results
+The library shall include validated requirements only when requirements array populated
+The library shall include thematic clusters when groups array populated
+The library shall include quality statistics when metrics object populated
+The library shall include domain coverage percentages when coverage object populated
+The library shall return empty arrays with zero metrics when processing empty
+The library shall provide id pattern trigger response category priority and confidence when requirement returned
+The library shall provide unique identifier when id field accessed
+The library shall provide EARS pattern type when pattern field accessed
+The library shall provide value between 0 and 1 when confidence field accessed
+The library shall throw ValidationError with message and details when validation fails
+The library shall throw ProcessingError with cause and context when processing fails
+The library shall throw ConfigurationError with invalid fields when configuration invalid
+The library shall return ValidationResult when user calls validateRequirement
+The library shall return boolean when user calls validateInput
+The library shall provide valid errors and warnings when validation result returned
+The library shall return formatted string when user calls exportToMarkdown
+The library shall return JSON string when user calls exportToJSON
+The library shall return formatted output when user calls exportToStructured
+The library shall return QualityReport when user calls analyzeQuality
+The library shall return CoverageReport when user calls analyzeCoverage
+The library shall update global settings when user calls setConfiguration
+The library shall return current settings when user calls getConfiguration
+The library shall restore defaults when user calls resetConfiguration
+The library shall return string array when user calls getSupportedDomains
+The library shall return available EARS patterns when user calls getPatternTypes
+The library shall return available priority values when user calls getPriorityLevels
+The library shall return BatchResult array when user calls processBatch
+The library shall return partial results with error details when batch processing fails
+When user calls processStream the library shall invoke callback with partial results
+When streaming complete the library shall invoke callback with final result
+The library shall cache processing results when user calls enableCache
+The library shall remove cached data when user calls clearCache
+The library shall return cache metrics when user calls getCacheStats
+The library shall provide complete TypeScript definitions when library imported
+The library shall export all public interfaces when types used
+Where generic types needed the library shall provide parameterized interfaces
+Where type checking enabled the library shall validate at compile time
