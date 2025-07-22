@@ -153,9 +153,9 @@ The parser shall not crash on malformed input`;
       const parser = new SimpleParser();
       
       // Test direct parser behavior
-      assert.throws(() => {
-        parser.parseDocument('Invalid requirement');
-      }, /Malformed requirement/);
+      const result = parser.parseDocument('Invalid requirement');
+      assert.strictEqual(result.errors.length, 1);
+      assert.ok(result.errors[0].message.includes('Malformed requirement'));
     });
   });
 

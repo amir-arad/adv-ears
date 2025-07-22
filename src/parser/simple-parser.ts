@@ -1,29 +1,52 @@
 import {
-  RequirementType,
-  RequirementNode,
   DocumentNode,
+  RequirementNode,
+  RequirementType,
 } from '../types/ast-types.js';
 
 export class SimpleParser {
   // Simple regex-based parser for Phase 1 MVP
-  parseDocument(content: string): DocumentNode {
-    const lines = content
-      .split('\n')
-      .map(line => line.trim())
-      .filter(line => line);
+  parseDocument(content: string): {
+    ast: DocumentNode;
+    errors: { line: number; message: string }[];
+  } {
+    const lines = content.split('\n');
     const requirements: RequirementNode[] = [];
+    const errors: { line: number; message: string }[] = [];
 
-    for (const line of lines) {
-      const requirement = this.parseRequirement(line);
-      if (requirement) {
-        requirements.push(requirement);
+    lines.forEach((line, index) => {
+      const trimmed = line.trim();
+      if (!trimmed) {
+        return;
       }
-    }
 
-    return {
+      try {
+        const requirement = this.parseRequirement(trimmed);
+        if (requirement) {
+          requirements.push({
+            ...requirement,
+            location: { line: index + 1, column: 1 },
+          });
+        } else {
+          errors.push({
+            line: index + 1,
+            message: `Malformed requirement: ${trimmed}`,
+          });
+        }
+      } catch (error) {
+        errors.push({
+          line: index + 1,
+          message: error instanceof Error ? error.message : 'Unknown error',
+        });
+      }
+    });
+
+    const ast: DocumentNode = {
       type: 'document',
       requirements,
     };
+
+    return { ast, errors };
   }
 
   private parseRequirement(line: string): RequirementNode | null {
@@ -100,7 +123,7 @@ export class SimpleParser {
       };
     }
 
-    // If no pattern matches, throw an error for malformed input
-    throw new Error(`Malformed requirement: ${line}`);
+    // If no pattern matches, return null (error handled in parseDocument)
+    return null;
   }
 }

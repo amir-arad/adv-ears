@@ -16,6 +16,13 @@ export function createRange(
 }
 
 /**
+ * Helper function to create a Range for an entire line
+ */
+export function createLineRange(lineNumber: number, lineText: string): Range {
+  return createRange(lineNumber, 0, lineNumber, lineText.length);
+}
+
+/**
  * Helper function to get word range at position
  */
 export function getWordRangeAtPosition(

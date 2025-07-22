@@ -4,7 +4,7 @@ import {
   Hover,
   HoverParams,
 } from 'vscode-languageserver/node.js';
-import { createRange, getWordRangeAtPosition } from './utils.js';
+import { createLineRange, getWordRangeAtPosition } from './utils.js';
 import {
   getActorHover,
   getKeywordHover,
@@ -33,20 +33,25 @@ export function validateDocument(
   hasDiagnosticRelatedInfo: boolean = false
 ): ValidationResult {
   const text = textDocument.getText();
+  const lines = text.split('\n');
   const diagnostics: Diagnostic[] = [];
 
   const parseResult = parseAearsFile(text);
 
   if (!parseResult.success) {
-    parseResult.errors.forEach((error, index) => {
+    parseResult.structuredErrors.forEach((error, index) => {
       if (index >= settings.maxNumberOfProblems) {
         return;
       }
 
+      // Convert 1-based line number to 0-based for LSP
+      const lineIndex = Math.max(0, error.line - 1);
+      const lineText = lines[lineIndex] || '';
+
       const diagnostic: Diagnostic = {
         severity: DiagnosticSeverity.Error,
-        range: createRange(0, 0, 0, text.length),
-        message: error,
+        range: createLineRange(lineIndex, lineText),
+        message: error.message,
         source: 'aears-lsp',
       };
 
